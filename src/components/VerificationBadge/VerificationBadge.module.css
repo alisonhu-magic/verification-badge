@@ -41,8 +41,9 @@
   transform-style: preserve-3d;
   will-change: transform;
   box-shadow: 0 24px 50px -30px rgba(16, 24, 40, 0.55);
-  font-family: "Suisse Intl", system-ui, sans-serif;
+  font-family: "Suisse Intl", sans-serif;
   color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
 .root > * {
@@ -217,6 +218,7 @@
   text-align: center;
   transform: translateZ(24px);
   padding: 6cqmin;
+  font-family: "Suisse Intl", sans-serif;
 }
 
 .mark {

@@ -11,7 +11,10 @@ describe("circMaskURI", () => {
   it("returns a data URI for non-empty text", () => {
     const uri = circMaskURI("SECURE");
     expect(uri).toMatch(/^data:image\/svg\+xml,/);
-    expect(decodeURIComponent(uri!)).toContain("SECURE");
+    const decoded = decodeURIComponent(uri!);
+    expect(decoded).toContain("SECURE");
+    expect(decoded).toContain("Suisse Intl");
+    expect(decoded).toContain("@font-face");
   });
 });
 

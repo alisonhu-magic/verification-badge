@@ -14,3 +14,8 @@ declare module "*.ttf" {
   const src: string;
   export default src;
 }
+
+declare module "*.ttf?inline" {
+  const dataUrl: string;
+  export default dataUrl;
+}

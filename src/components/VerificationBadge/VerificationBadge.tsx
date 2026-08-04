@@ -16,6 +16,7 @@ import {
   PARTNER_PATHS,
   PARTNER_VIEWBOX,
 } from "../../utils/marks";
+import "../../styles/fonts.css";
 import styles from "./VerificationBadge.module.css";
 
 export type {
