@@ -1,10 +1,25 @@
 # Verification Badge
 
-Holographic security-label UI as a reusable React component, plus a design studio demo.
+Reusable React holographic verification label (`VerificationBadge`) plus an interactive design studio.
 
-This is a design exploration of holographic verification artifacts — **not** a production authentication system.
+This is a **design exploration** for Newton · Authorization Layer — not a production authentication system.
 
 **Live demo:** https://alisonhu-magic.github.io/verification-badge/
+
+> **Pages note:** Deploy uses GitHub Actions (`.github/workflows/deploy.yml`). In repo **Settings → Pages**, set Source to **GitHub Actions**. If Source is still “Deploy from a branch”, the live site will serve the Vite source `index.html` and look blank.
+
+## Preview
+
+![Design studio — desktop](docs/studio-desktop.jpg)
+
+| Component close-up                     | Focus view                           | Mobile                                   |
+| -------------------------------------- | ------------------------------------ | ---------------------------------------- |
+| ![Badge detail](docs/badge-detail.jpg) | ![Focus mode](docs/studio-focus.jpg) | ![Mobile layout](docs/studio-mobile.jpg) |
+
+- **Hover / pointer** moves the holographic light across a label.
+- **Click** a label to focus it; **Esc** closes focus.
+- The right panel tunes optics, interaction mode, and printed copy.
+- The **Integrate** panel shows a ready-to-paste import snippet for the selected variant.
 
 ## Quick start
 
@@ -13,40 +28,37 @@ npm install
 npm run dev
 ```
 
-Open the local Vite URL (usually `http://localhost:5173/verification-badge/`).
+Open the local URL (usually `http://localhost:5173/verification-badge/`).
 
 ## Scripts
 
-| Command                | Purpose                                   |
-| ---------------------- | ----------------------------------------- |
-| `npm run dev`          | Start the design studio                   |
-| `npm run build`        | Type-check and production build → `dist/` |
-| `npm run preview`      | Preview the production build              |
-| `npm run typecheck`    | TypeScript project check                  |
-| `npm run lint`         | ESLint                                    |
-| `npm run format`       | Prettier write                            |
-| `npm run format:check` | Prettier check                            |
-| `npm test`             | Vitest unit/component tests               |
+| Command                           | Purpose                                 |
+| --------------------------------- | --------------------------------------- |
+| `npm run dev`                     | Design studio                           |
+| `npm run build`                   | Type-check + production build → `dist/` |
+| `npm run preview`                 | Preview production build                |
+| `npm run typecheck`               | TypeScript check                        |
+| `npm run lint`                    | ESLint                                  |
+| `npm run format` / `format:check` | Prettier                                |
+| `npm test`                        | Vitest                                  |
 
 ## Repository structure
 
 ```
 src/
-  components/
-    VerificationBadge/     # Public UI component + CSS module + tests
-    index.ts               # Barrel exports
-  hooks/                   # Pointer / light rAF hook
-  utils/                   # Presets, circ-mask, mark paths
-  types/                   # Shared TypeScript types
-  styles/                  # Fonts + demo shell tokens
-  demo/                    # Studio application (not for product import)
-    examples/              # Minimal integration example
-  assets/
-    fonts/                 # Suisse Intl (400–700)
-    patterns/              # Guilloché PNGs (p1–p4)
+  components/VerificationBadge/   # Public component + CSS module + tests
+  components/index.ts             # Barrel exports
+  hooks/                          # Pointer / light rAF
+  utils/                          # Presets, circ-mask, marks
+  types/                          # Shared types
+  styles/                         # Fonts + demo tokens
+  demo/                           # Studio shell (do not ship to product)
+    examples/ProductExample.tsx   # Minimal host-app example
+  assets/fonts|patterns/          # Suisse Intl + guilloché PNGs
+docs/                             # README screenshots
 ```
 
-## Public component API
+## Public API
 
 ### Import
 
@@ -57,17 +69,15 @@ import {
   DEFAULT_CONTENT,
   DEFAULT_OPTICS,
 } from "./src/components";
-// or, once wired into your monorepo / package alias:
-// import { VerificationBadge } from "verification-badge";
 ```
 
-Also load the font face (or provide an equivalent `@font-face` in the host app):
+Load the typeface (or an equivalent host `@font-face` named `"Suisse Intl"`):
 
 ```ts
 import "./src/styles/fonts.css";
 ```
 
-Pattern PNGs are imported by the component; Vite (or your bundler) must support `*.png` imports.
+Your bundler must support **CSS modules** and **PNG imports**.
 
 ### Example
 
@@ -97,60 +107,62 @@ export function CertificateBadge() {
 }
 ```
 
-See `src/demo/examples/ProductExample.tsx`.
+See also `src/demo/examples/ProductExample.tsx`.
+
+### Variants
+
+| `variant`           | Pattern | Description                      |
+| ------------------- | ------- | -------------------------------- |
+| `radial-seal`       | `p1`    | Centred guilloché mandala        |
+| `embossed-artifact` | `p3`    | Ornate engraving / raised relief |
+| `prismatic-coin`    | `p2`    | Aperture swirl, coin-like        |
+| `dark-iridescent`   | `p4`    | Concentric waves                 |
 
 ### Props (`VerificationBadgeProps`)
 
-| Prop                  | Type                                                                            | Default               | Notes                       |
-| --------------------- | ------------------------------------------------------------------------------- | --------------------- | --------------------------- |
-| `variant`             | `"radial-seal" \| "embossed-artifact" \| "prismatic-coin" \| "dark-iridescent"` | `"radial-seal"`       | Pattern direction           |
-| `substrate`           | `"silver" \| "gold" \| "dark"`                                                  | preset default        | Metal look                  |
-| `size`                | `number \| string`                                                              | parent width          | Square CSS size             |
-| `content`             | `BadgeContent`                                                                  | see `DEFAULT_CONTENT` | Printed copy                |
-| `optics`              | `BadgeOptics`                                                                   | see `DEFAULT_OPTICS`  | Intensity, density, etc.    |
-| `interaction`         | `boolean`                                                                       | `true`                | Pointer-driven light        |
-| `interactionStyle`    | `"tilt" \| "flat" \| "loupe" \| "sweep"`                                        | `"sweep"`             | Light behavior              |
-| `freeze`              | `boolean`                                                                       | `false`               | Lock light position         |
-| `disabled`            | `boolean`                                                                       | `false`               | Blocks interaction          |
-| `loading`             | `boolean`                                                                       | `false`               | Placeholder state           |
-| `patternSrc`          | `string`                                                                        | preset PNG            | Override mask image         |
-| `className` / `style` | —                                                                               | —                     | Host styling                |
-| `onActivate`          | `() => void`                                                                    | —                     | Click / Enter / Space       |
-| `sweepOffset`         | `number`                                                                        | `0`                   | Phase for multi-badge sweep |
-| `aria-label`          | `string`                                                                        | auto                  | Accessible name             |
+| Prop                  | Type                                     | Default           | Notes                    |
+| --------------------- | ---------------------------------------- | ----------------- | ------------------------ |
+| `variant`             | see above                                | `"radial-seal"`   | Pattern direction        |
+| `substrate`           | `"silver" \| "gold" \| "dark"`           | preset            | Metal look               |
+| `size`                | `number \| string`                       | parent width      | Square CSS size          |
+| `content`             | `BadgeContent`                           | `DEFAULT_CONTENT` | Printed copy             |
+| `optics`              | `BadgeOptics`                            | `DEFAULT_OPTICS`  | Intensity, density, etc. |
+| `interaction`         | `boolean`                                | `true`            | Pointer-driven light     |
+| `interactionStyle`    | `"tilt" \| "flat" \| "loupe" \| "sweep"` | `"sweep"`         | Light behavior           |
+| `freeze`              | `boolean`                                | `false`           | Lock light position      |
+| `disabled`            | `boolean`                                | `false`           | Blocks interaction       |
+| `loading`             | `boolean`                                | `false`           | Placeholder state        |
+| `patternSrc`          | `string`                                 | preset PNG        | Override mask            |
+| `className` / `style` | —                                        | —                 | Host styling             |
+| `onActivate`          | `() => void`                             | —                 | Click / Enter / Space    |
+| `sweepOffset`         | `number`                                 | `0`               | Multi-badge sweep phase  |
+| `aria-label`          | `string`                                 | auto              | Accessible name          |
 
-**States:** normal, hover/pointer light, focus-visible, active (keyboard/click), disabled, loading, empty content (missing primary text), circular ring hidden when `content.circular` is blank.
+**States:** normal · pointer light · focus-visible · activate · disabled · loading · empty copy · hidden ring when `content.circular` is blank.
 
-## Integration into another React product
+## Integrate into another React product
 
-1. Copy or path-alias `src/components`, `src/hooks`, `src/utils`, `src/types`, and `src/assets` into the host app (or consume this repo as a workspace package).
-2. Ensure the host bundler handles CSS modules and PNG imports.
-3. Register Suisse Intl via `src/styles/fonts.css` (or host-owned `@font-face` with the same family name).
-4. Peer dependencies: **React 18+** and **React DOM**.
-5. No environment variables or context providers are required.
-6. Do **not** import `src/demo/*` into product code — that is the studio shell only.
+1. Path-alias or copy `src/components`, `src/hooks`, `src/utils`, `src/types`, and `src/assets`.
+2. Ensure CSS modules + PNG imports work in the host bundler.
+3. Register Suisse Intl (`src/styles/fonts.css` or host fonts).
+4. Peer deps: **React 18+** and **React DOM**.
+5. No providers or env vars required.
+6. Do **not** import `src/demo/*` into product code.
 
-## Styling & assets
+## Deploy
 
-- Component styles are CSS modules (`VerificationBadge.module.css`) — no global label CSS required.
-- Demo shell styles live in `src/styles/demo.css` and `src/demo/Studio.module.css`.
-- Required assets: `src/assets/patterns/p1.png`–`p4.png`, Suisse Intl TTFs under `src/assets/fonts/`.
-- Confirm Suisse Intl licensing before shipping in a commercial product.
+`vite.config.ts` sets `base: "/verification-badge/"`. Pushing to `main` runs `.github/workflows/deploy.yml` and publishes `dist/`.
 
-## Deploy (GitHub Pages)
-
-`vite.config.ts` sets `base: "/verification-badge/"`. Pushing to `main` runs `.github/workflows/deploy.yml`, which builds and publishes `dist/`.
-
-In the GitHub repo settings, set Pages source to **GitHub Actions**.
+**Required once:** Settings → Pages → Source → **GitHub Actions**.
 
 ## Known limitations
 
-- Optical effects rely on CSS `mask-image`, `mix-blend-mode`, and `container-type: size` — require modern browsers.
-- Auto-sweep / pointer light is decorative; it is not a cryptographic verification signal.
-- Partner mark defaults to the Bizantine lockup baked into `src/utils/marks.ts`.
-- Canvas is **1:1 only** (multi-ratio formats intentionally omitted).
-- String “Generate component” codegen has been removed; use real imports.
-- This package is private / source-copy oriented — not published to npm by default.
+- Needs modern CSS: `mask-image`, `mix-blend-mode`, `container-type: size`.
+- Holographic motion is decorative — not cryptographic verification.
+- Default partner mark is Bizantine (`src/utils/marks.ts`).
+- Canvas is **1:1 only**.
+- Suisse Intl licensing must be confirmed for commercial product use.
+- Source-copy / private handoff — not published to npm by default.
 
 ## License / notice
 
