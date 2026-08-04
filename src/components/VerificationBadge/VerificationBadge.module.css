@@ -1,0 +1,378 @@
+/* VerificationBadge optical layers — scoped to the component root. */
+
+.root {
+  --px: 0.5;
+  --py: 0.4;
+  --la: 110deg;
+  --rx: 0deg;
+  --ry: 0deg;
+  --act: 0;
+  --intensity: 0.7;
+  --saturation: 1;
+  --refl: 150;
+  --patsize: 94%;
+  --patopacity: 0.55;
+  --patmask: none;
+  --logomask: none;
+  --partnermask: none;
+  --circmask: none;
+  --holo: linear-gradient(
+    115deg,
+    #ff6b8b 0%,
+    #ffd36b 15%,
+    #f6ff6b 29%,
+    #6bffa5 44%,
+    #6bd4ff 60%,
+    #b06bff 76%,
+    #ff6bd4 90%,
+    #ff6b8b 100%
+  );
+
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+  container-type: size;
+  isolation: isolate;
+  transform: perspective(760px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  will-change: transform;
+  box-shadow: 0 24px 50px -30px rgba(16, 24, 40, 0.55);
+  font-family: "Suisse Intl", system-ui, sans-serif;
+  color: var(--ink);
+}
+
+.root > * {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.root[data-substrate="silver"] {
+  --ink: #14171c;
+  --sub: rgba(20, 23, 28, 0.55);
+  --micro-ink: rgba(48, 54, 64, 0.9);
+  --micro-line: rgba(40, 46, 56, 0.5);
+  --edge: rgba(255, 255, 255, 0.55);
+}
+
+.root[data-substrate="gold"] {
+  --ink: #221704;
+  --sub: rgba(34, 23, 4, 0.55);
+  --micro-ink: rgba(120, 86, 30, 0.85);
+  --micro-line: rgba(120, 90, 40, 0.5);
+  --edge: rgba(255, 240, 205, 0.55);
+}
+
+.root[data-substrate="dark"] {
+  --ink: #fefdf9;
+  --sub: rgba(254, 253, 249, 0.6);
+  --micro-ink: rgba(214, 179, 118, 0.72);
+  --micro-line: rgba(214, 179, 118, 0.28);
+  --edge: rgba(214, 179, 118, 0.3);
+}
+
+.substrate[data-substrate="silver"],
+.root[data-substrate="silver"] .substrate {
+  background:
+    repeating-linear-gradient(
+      var(--la),
+      rgba(255, 255, 255, 0.07) 0 2px,
+      rgba(0, 0, 0, 0.045) 2px 4px
+    ),
+    radial-gradient(
+      130% 130% at calc(var(--px) * 100%) calc(var(--py) * 100%),
+      #ffffff 0%,
+      #cdd3db 42%,
+      #a6aeb9 72%,
+      #868f9b 100%
+    );
+}
+
+.root[data-substrate="gold"] .substrate {
+  background:
+    repeating-linear-gradient(
+      var(--la),
+      rgba(255, 244, 220, 0.1) 0 2px,
+      rgba(90, 60, 10, 0.06) 2px 4px
+    ),
+    radial-gradient(
+      130% 130% at calc(var(--px) * 100%) calc(var(--py) * 100%),
+      #fff3d4 0%,
+      #e8c880 42%,
+      #bd903f 72%,
+      #8c672c 100%
+    );
+}
+
+.root[data-substrate="dark"] .substrate {
+  background:
+    repeating-linear-gradient(
+      var(--la),
+      rgba(255, 255, 255, 0.035) 0 2px,
+      rgba(0, 0, 0, 0.2) 2px 4px
+    ),
+    radial-gradient(
+      130% 130% at calc(var(--px) * 100%) calc(var(--py) * 100%),
+      #2b2c31 0%,
+      #17181c 48%,
+      #08090b 88%
+    );
+}
+
+.microMask::before,
+.microMask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-mask: var(--patmask) center / var(--patsize) no-repeat;
+  mask: var(--patmask) center / var(--patsize) no-repeat;
+}
+
+.microMask::before {
+  background: var(--micro-ink);
+  opacity: var(--patopacity, 0.55);
+}
+
+.microMask::after {
+  background: var(--holo);
+  background-size: 300% 300%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  filter: saturate(var(--saturation));
+  opacity: calc(var(--act) * var(--intensity));
+  mix-blend-mode: screen;
+}
+
+.specular {
+  background: radial-gradient(
+    circle calc(var(--refl) * 1px) at calc(var(--px) * 100%) calc(var(--py) * 100%),
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.28) 32%,
+    transparent 62%
+  );
+  opacity: calc(0.45 + var(--act) * 0.55);
+  mix-blend-mode: soft-light;
+}
+
+.root[data-substrate="dark"] .specular {
+  mix-blend-mode: screen;
+}
+
+.loupe {
+  opacity: 0;
+  background: radial-gradient(
+    circle at calc(var(--px) * 100%) calc(var(--py) * 100%),
+    transparent 17.5%,
+    rgba(255, 255, 255, 0.55) 18.4%,
+    transparent 20%
+  );
+  mix-blend-mode: overlay;
+  transition: opacity 0.15s;
+}
+
+.root[data-mode="loupe"] .loupe {
+  opacity: calc(0.4 + var(--act) * 0.6);
+}
+
+.root[data-mode="loupe"] .specular {
+  filter: contrast(1.15);
+}
+
+.circtext::before,
+.circtext::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  -webkit-mask: var(--circmask) center / contain no-repeat;
+  mask: var(--circmask) center / contain no-repeat;
+}
+
+.circtext::before {
+  background: var(--ink);
+  opacity: 0.85;
+}
+
+.circtext::after {
+  background: var(--holo);
+  background-size: 300% 300%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  filter: saturate(var(--saturation));
+  opacity: calc(var(--act) * var(--intensity));
+  mix-blend-mode: screen;
+}
+
+.circtextHidden {
+  display: none;
+}
+
+.print {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2cqmin;
+  text-align: center;
+  transform: translateZ(24px);
+  padding: 6cqmin;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3cqmin;
+  height: 19cqmin;
+  color: var(--ink);
+}
+
+.logo {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.logo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--holo);
+  background-size: 300% 300%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  filter: saturate(var(--saturation));
+  opacity: calc(var(--act) * var(--intensity));
+  mix-blend-mode: screen;
+}
+
+.logoNewton::after {
+  -webkit-mask: var(--logomask) center / contain no-repeat;
+  mask: var(--logomask) center / contain no-repeat;
+}
+
+.logoPartner::after {
+  -webkit-mask: var(--partnermask) center / contain no-repeat;
+  mask: var(--partnermask) center / contain no-repeat;
+}
+
+.lx {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 8cqmin;
+  line-height: 1;
+  color: var(--sub);
+}
+
+.wordmark {
+  position: relative;
+  font-weight: 700;
+  font-size: 10cqmin;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.wordmark::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  background: var(--holo);
+  background-size: 300% 300%;
+  background-position: calc(var(--px) * 100%) calc(var(--py) * 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: saturate(var(--saturation));
+  opacity: calc(var(--act) * var(--intensity));
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.cobrand {
+  display: flex;
+  align-items: center;
+  gap: 1.6cqmin;
+  font-size: 3.9cqmin;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--sub);
+}
+
+.cobrand i {
+  color: var(--micro-ink);
+  font-style: normal;
+}
+
+.serial {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7cqmin;
+  margin-top: 1.2cqmin;
+  font-size: 3.3cqmin;
+  letter-spacing: 0.14em;
+  color: var(--sub);
+}
+
+.serial b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+}
+
+.edge {
+  border-radius: inherit;
+  border: 1px solid var(--edge);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -24px 44px -22px rgba(0, 0, 0, 0.45);
+}
+
+.root:focus-visible {
+  box-shadow:
+    0 0 0 3px #d6b376,
+    0 0 0 6px rgba(214, 179, 118, 0.28),
+    0 24px 50px -30px rgba(16, 24, 40, 0.55);
+}
+
+.root[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.15);
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #eef0f3, #d8dde5);
+  color: #667085;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+.loading > * {
+  position: static;
+  pointer-events: auto;
+}
+
+.empty {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    will-change: auto;
+  }
+  .loupe {
+    transition: none;
+  }
+}
