@@ -11,7 +11,6 @@ import type {
   BadgeVariant,
   InteractionStyle,
 } from "../components";
-import { NEWTON_LOGO_PATH } from "../utils/marks";
 import styles from "./Studio.module.css";
 
 const INTERACTION_STYLES: InteractionStyle[] = ["tilt", "flat", "loupe", "sweep"];
@@ -79,27 +78,6 @@ export function Studio() {
 
   return (
     <div className={focused ? styles.focusOpen : undefined}>
-      <header className={styles.masthead}>
-        <span className={styles.dot}>
-          <svg viewBox="0 0 400 400" aria-hidden="true">
-            <path d={NEWTON_LOGO_PATH} fill="#FEFDF9" />
-          </svg>
-        </span>
-        <div>
-          <h1>
-            Holographic Artifact Study{" "}
-            <span className={styles.badge}>Design exploration</span>
-          </h1>
-          <p>Interactive review of holographic security-label directions.</p>
-        </div>
-        <span className={styles.spacer} />
-        <div className={styles.meta}>
-          Newton · Authorization Layer
-          <br />
-          Genuine Protocol Artifact
-        </div>
-      </header>
-
       <div className={styles.wrap}>
         <main className={styles.studio}>
           <div className={styles.sectionH}>

@@ -1,71 +1,3 @@
-.masthead {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--g200);
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  position: sticky;
-  top: 0;
-  z-index: 20;
-}
-
-.dot {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  background: var(--coal);
-  display: grid;
-  place-items: center;
-  flex: none;
-}
-
-.dot svg {
-  width: 17px;
-  height: 17px;
-}
-
-.masthead h1 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.masthead p {
-  font-size: 12px;
-  color: var(--g500);
-  margin: 2px 0 0;
-}
-
-.spacer {
-  flex: 1;
-}
-
-.meta {
-  font-size: 11px;
-  color: var(--g500);
-  text-align: right;
-  line-height: 1.5;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 8px;
-  border: 1px solid var(--g200);
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--g600);
-  background: var(--g50);
-}
-
 .wrap {
   display: grid;
   grid-template-columns: 1fr 360px;
@@ -155,9 +87,9 @@
   background: #fff;
   padding: 24px;
   position: sticky;
-  top: var(--masthead-h);
+  top: 0;
   align-self: start;
-  max-height: calc(100vh - var(--masthead-h));
+  max-height: 100vh;
   overflow-y: auto;
 }
 
