@@ -159,8 +159,8 @@ export function VerificationBadge({
           <span>{c.customer}</span>
         </div>
         <div className={styles.serial}>
-          <span>{c.protocol}</span>
-          <b>{c.serial}</b>
+          <span className={styles.multiline}>{c.protocol}</span>
+          <b className={styles.multiline}>{c.serial}</b>
         </div>
       </div>
       <div className={styles.edge} />

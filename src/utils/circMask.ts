@@ -1,4 +1,4 @@
-import suisseSemibold from "../assets/fonts/suisse-intl-600.ttf?inline";
+import suisseMedium from "../assets/fonts/suisse-intl-500.ttf?inline";
 
 /** Build an SVG data-URI alpha mask for circular seal-ring text.
  *  Embeds Suisse Intl so the mask glyphs match the printed label type
@@ -17,12 +17,12 @@ export function circMaskURI(text: string | undefined | null): string | null {
   const svg =
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'>" +
     "<defs>" +
-    "<style>@font-face{font-family:'Suisse Intl';font-style:normal;font-weight:600;" +
-    `src:url(${suisseSemibold}) format('truetype');}` +
+    "<style>@font-face{font-family:'Suisse Intl';font-style:normal;font-weight:500;" +
+    `src:url(${suisseMedium}) format('truetype');}` +
     "</style>" +
     "<path id='cp' d='M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0'/>" +
     "</defs>" +
-    "<text fill='#fff' font-family='Suisse Intl' font-size='11.5' font-weight='600' letter-spacing='2'>" +
+    "<text fill='#fff' font-family='Suisse Intl' font-size='11.5' font-weight='500' letter-spacing='2'>" +
     "<textPath href='#cp' startOffset='50%' text-anchor='middle' textLength='508' lengthAdjust='spacingAndGlyphs'>" +
     esc(ring.trim()) +
     "</textPath></text></svg>";

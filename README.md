@@ -94,7 +94,7 @@ export function CertificateBadge() {
         verified: "VERIFIED",
         brand: "NEWTON",
         customer: "ACME",
-        protocol: "GENUINE PROTOCOL ARTIFACT",
+        protocol: "AUTHORIZATION LAYER\nSEAL",
         serial: "N° 000001",
         circular: "SECURE · GENUINE · VALID · AUTHENTIC",
       }}

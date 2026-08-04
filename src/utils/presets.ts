@@ -50,7 +50,7 @@ export const DEFAULT_CONTENT: Required<BadgeContent> = {
   verified: "VERIFIED",
   brand: "NEWTON",
   customer: "BIZANTINE",
-  protocol: "GENUINE PROTOCOL ARTIFACT",
+  protocol: "AUTHORIZATION LAYER\nSEAL",
   serial: "N° 000241",
   circular: "SECURE · GENUINE · VALID · AUTHENTIC",
 };

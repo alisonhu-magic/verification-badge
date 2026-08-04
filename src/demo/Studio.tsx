@@ -257,11 +257,13 @@ export function Studio() {
               label="Protocol line"
               value={content.protocol}
               onChange={(v) => setContent((c) => ({ ...c, protocol: v }))}
+              multiline
             />
             <TextField
               label="Serial"
               value={content.serial}
               onChange={(v) => setContent((c) => ({ ...c, serial: v }))}
+              multiline
             />
             <TextField
               label="Circular ring text"
@@ -350,21 +352,40 @@ function TextField({
   label,
   value,
   onChange,
+  multiline = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  multiline?: boolean;
 }) {
   return (
     <div className={styles.field}>
       <label>{label}</label>
-      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
+      {multiline ? (
+        <textarea
+          rows={3}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+        />
+      ) : (
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+        />
+      )}
     </div>
   );
 }
 
 function escapeSnippet(s: string): string {
-  return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return s
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n");
 }
 
 export default Studio;
